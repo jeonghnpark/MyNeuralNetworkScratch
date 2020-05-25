@@ -14,3 +14,21 @@ print(t.shape)
 
 ones=np.ones((1,4))
 print(ones, ones.shape)
+
+ndar=np.array([1,2,3])
+
+def fct(k):
+    return k**2
+
+def step(x):
+    for each in x:  
+        if each > 0.5:
+            each=1
+        else:
+            each=0
+    return x
+def fct2(x):
+    x=x**2
+
+print(step(ndar))
+print(fct2(3))

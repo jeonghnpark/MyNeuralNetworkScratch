@@ -3,6 +3,15 @@ import matplotlib.pyplot as plt
 
 np.random.seed(13)
 X=np.array([[1,0,1,0],[1,1,0,0]])
+
+#more readable way for input 
+x1=np.array([1,1])
+x2=np.array([1,0])
+x3=np.array([0,1])
+x4=np.array([0,0])
+X=np.column_stack((x1,x2,x3,x4))
+
+
 y=np.array([1,0,0,0])
 y=y.reshape(1,4)  #better way? 
 print(X,y,X.shape,y.shape)
@@ -22,20 +31,21 @@ print(y_p, y_p.shape)
 def sigmoid(x):
     return 1/(1+np.exp(-x))
 
-def step(x):
-    if x > 0.5:
+# def step(x):
+#     if x > 0.5:
+#         return 1
+#     else:
+#         return 0
+
+def step(y):
+    if y>0.5:
         return 1
     else:
         return 0
 
 
-def acc(W,X,B,y):
-    y_p=W@X+B
-
-    return ((y-y_p)**2).mean()
-
 lr=0.1
-epochs=1000
+epochs=50
 losses=[]
 xaxis=[]
 Ws=[]
@@ -53,10 +63,15 @@ for epoch in range(epochs):
     W+=-lr*dW
     B+=-lr*dB
     # print(acc(W,X,B,y))
+
 y_p=W@X+B
-for y in y_p:
-    print(y)
-print(y_p.shape, y_p)
+# print(y_p.shape[1])
+y_out=y_p.reshape((y_p.shape[1],))
+print('yout', y_out)
+for x,y in zip(X,y_out):
+    print(x,y)
+    
+
 plt.plot(xaxis, losses)
 plt.show()
 

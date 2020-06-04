@@ -35,5 +35,12 @@ x1_2d=x1_2d.T
 print(x1_2d, x1_2d.shape, x1_2d.ndim)
 
 
-
-
+mat=np.array([[1,2,3],[4,5,6],[7,8,9]])
+print(mat)
+for e in mat:
+    for e1 in e:
+        if e1>3:
+            e1=1
+        else:
+            e1=0
+print(mat)

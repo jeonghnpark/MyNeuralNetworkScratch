@@ -7,6 +7,10 @@ class Logic_gate():
         np.random.seed(13)
         self.W=np.random.randn(1,2)
         self.B=np.random.randn(1,1)
+
+    def predict(self,X):
+        return self.W @ X +self.B
+
     def forward(self, x):
         return self.W@x+self.B
     def sigmoid(self, x):
@@ -18,8 +22,8 @@ class Logic_gate():
     def train(self, X,y):
         #X column-stacked input, 2d ndarray
         #y target column, 2d ndarray
-        lr=0.5
-        epochs=5000
+        lr=0.01
+        epochs=1000
         losses=[]
         xaxis=[]
         Ws=[]
@@ -38,7 +42,7 @@ class Logic_gate():
             dB=-2*y_p*(y-y_p)*y_p*(1-y_p) @ np.ones_like(y).T
             self.W+=-lr*dW
             self.B+=-lr*dB
-            # print('loss', (y-self.sigmoid(self.W@X +self.B))**2,((y-self.sigmoid(self.W@X +self.B))**2).mean())
+            print('loss', (y-self.sigmoid(self.W@X +self.B))**2,((y-self.sigmoid(self.W@X +self.B))**2).mean())
         plt.plot(xaxis, losses)
         plt.show()
 
@@ -83,32 +87,73 @@ class Logic_gate():
             # print(loss)
             losses.append(loss)
             xaxis.append(epoch)
+        
         plt.plot(xaxis, losses)
+        plt.show()
 
 
-#more readable way for input 
-x1=np.array([1,1], dtype=float)
-x2=np.array([1,0], dtype=float)
-x3=np.array([0,1], dtype=float)
-x4=np.array([0,0], dtype=float)
-X=np.column_stack((x1,x2,x3,x4))
-y=np.array([1,0,0,0], dtype=float) #AND gate
 
-g=Logic_gate()
+def test_and_gate_1():
+    #more readable way for input 
+    x1=np.array([1,1], dtype=float)
+    x2=np.array([1,0], dtype=float)
+    x3=np.array([0,1], dtype=float)
+    x4=np.array([0,0], dtype=float)
+    X=np.column_stack((x1,x2,x3,x4))
+    y=np.array([1,0,0,0], dtype=float) #AND gate
 
-print('weight before train', g.W, g.B)
-print('y  y_pred  y_target')
-for x,y_ in zip(X.T,y):
-    x=np.reshape(x, (2,1))
-    print(g.forward(x),g.y_pred(x), y_)
+    g=Logic_gate()
 
-g.train2(X, y)
+    print('weight before train', g.W, g.B)
+    print('y  y_pred  y_target')
+    for x,y_ in zip(X.T,y):
+        x=np.reshape(x, (2,1))
+        print(g.forward(x),g.y_pred(x), y_)
 
-print('weigh after train', g.W, g.B)
+    g.train(X, y)
 
-for x,y_ in zip(X.T,y):
-    x=np.reshape(x, (2,1))
-    print(g.forward(x),g.y_pred(x), y_)
+    print('weigh after train', g.W, g.B)
 
-plt.show()
+    for x,y_ in zip(X.T,y):
+        x=np.reshape(x, (2,1))
+        print(g.forward(x),g.y_pred(x), y_)
 
+def test_and_gate_2():
+    #more readable way for input 
+    x1=np.array([1,1], dtype=float)
+    x2=np.array([1,0], dtype=float)
+    x3=np.array([0,1], dtype=float)
+    x4=np.array([0,0], dtype=float)
+    X=np.column_stack((x1,x2,x3,x4))
+    y=np.array([1,0,0,0], dtype=float) #AND gate
+
+    g=Logic_gate()
+    g.train2(X, y)
+    # res=g.predict(X)
+
+def test_xor_gate():
+    #more readable way for input 
+    x1=np.array([1,1], dtype=float)
+    x2=np.array([1,0], dtype=float)
+    x3=np.array([0,1], dtype=float)
+    x4=np.array([0,0], dtype=float)
+    X=np.column_stack((x1,x2,x3,x4))
+    y=np.array([0,1,1,0], dtype=float) #XOR gate
+
+    g=Logic_gate()
+    print('weight before train', g.W, g.B)
+    print('y  y_pred  y_target')
+    for x,y_ in zip(X.T,y):
+        x=np.reshape(x, (2,1))
+        print(g.forward(x),g.y_pred(x), y_)
+    g.train(X, y)
+    print('weigh after train', g.W, g.B)
+    for x,y_ in zip(X.T,y):
+        x=np.reshape(x, (2,1))
+        print(g.forward(x),g.y_pred(x), y_)
+
+
+if __name__=="__main__":
+    test_and_gate_1()
+    # test_and_gate_2() #파라미터에 따라서 초기 loss가 증가하는 현상
+    # test_xor_gate() #초기 loss가 증가하는 이유가 뭔가? 
